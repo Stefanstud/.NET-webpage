@@ -1,0 +1,83 @@
+﻿@model RSWEB_workshop.Models.TeacherViewModel
+
+@{
+    ViewData["Title"] = "Teachers";
+}
+
+<h1>Teachers</h1>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<form asp-controller="Teachers" asp-action="Index" method="get">
+    <p>
+        <select asp-for="academicRank" asp-items="Model.Ranks">
+            <option value="">All</option>
+        </select> 
+        <select asp-for="educationLevel" asp-items="Model.Degrees">
+            <option value="">All</option>
+        </select> 
+        Name: <input type="text" name="searchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].HireDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].Degree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].AcademicRank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].OfficeNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Teachers) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HireDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Degree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcademicRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            <td>
+               @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                { <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> } |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                { <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> }
+                <a asp-controller="Courses" asp-action="Teaching" asp-route-id="@item.Id">See Courses</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

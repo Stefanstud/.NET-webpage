@@ -1,0 +1,271 @@
+Vo TeacherController.cs smeni Deatils so ova : 
+
+public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var teacher = await _context.Teacher
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (teacher == null)
+            {
+                return NotFound();
+            }
+
+            TeacherPicture viewmodel = new TeacherPicture
+            {
+                Teacher = teacher,
+                ProfilePictureName = teacher.Picture
+            };
+
+            return View(viewmodel);
+        }
+
+private string UploadedFile(TeacherPicture viewmodel)
+        {
+            string uniqueFileName = null;
+
+            if (viewmodel.ProfilePictureFile != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Pictures");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(viewmodel.ProfilePictureFile.FileName);
+                string fileNameWithPath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    viewmodel.ProfilePictureFile.CopyTo(stream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+---------------------------------------------------------------------
+Vo StudentController.cs smeni Deatils so ova i dodadi go dolnoto: 
+
+ public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Student
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            StudentPicture viewmodel = new StudentPicture
+            {
+                Student = student,
+                ProfilePictureName = student.Picture
+            };
+
+            return View(viewmodel);
+        }
+
+private string UploadedFile(StudentPicture viewmodel)
+        {
+            string uniqueFileName = null;
+
+            if (viewmodel.ProfilePictureFile != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Pictures");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(viewmodel.ProfilePictureFile.FileName);
+                string fileNameWithPath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    viewmodel.ProfilePictureFile.CopyTo(stream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+----------------------------------------------------------------------------
+Views/Students/Details.cshtml :
+
+@model RSWEB_workshop.ViewModels.StudentPicture
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+           Profile picture:
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="~/Pictures/@Model.Student.Picture" height="50" width="50" asp-append-version="true" />
+        </dd> 
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.FirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.LastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.LastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.EnrollmentDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.EnrollmentDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.StudentId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.StudentId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.AcquiredCredits)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.AcquiredCredits)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.CurrentSemester)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.CurrentSemester)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Student.EducationLevel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.EducationLevel)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Student.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+-------------------------------------------------
+Views/Teacher/Details.cshtml :
+
+@model RSWEB_workshop.ViewModels.TeacherPicture
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Teacher</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+           Profile picture:
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="~/Pictures/@Model.Teacher.Picture" height="50" width="50" asp-append-version="true" />
+        </dd>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.FirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.LastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.LastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.HireDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.HireDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.Degree)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.Degree)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.AcademicRank)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.AcademicRank)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teacher.OfficeNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Teacher.OfficeNumber)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Teacher.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+-----------------------------------------------------------
+
+Nov ViewModel TeacherPicture.cs :
+
+using RSWEB_workshop.Models;
+
+namespace RSWEB_workshop.ViewModels
+{
+    public class TeacherPicture
+    {
+        public Teacher? Teacher { get; set; }
+
+        [Display(Name = "Upload picture")]
+        public IFormFile? ProfilePictureFile { get; set; }
+
+        [Display(Name = "Picture")]
+        public string? ProfilePictureName { get; set; }
+    }
+}
+-------------------------------------------
+
+Nov ViewModel StudentPicture.cs 
+
+using System.ComponentModel.DataAnnotations;
+using RSWEB_workshop.Models;
+
+namespace RSWEB_workshop.ViewModels
+{
+    public class StudentPicture
+    {
+        public Student? Student { get; set; }
+
+        [Display(Name = "Upload picture")]
+        public IFormFile? ProfilePictureFile { get; set; }
+
+        [Display(Name = "Picture")]
+        public string? ProfilePictureName { get; set; }
+    }
+}
+

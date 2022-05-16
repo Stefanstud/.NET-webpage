@@ -1,0 +1,107 @@
+﻿@model RSWEB_workshop.ViewModels.ProfStudentViewModel
+
+@{
+    ViewData["Title"] = "Professor See Students";
+}
+
+<h1>"@ViewBag.course" Active Students </h1>
+
+<form asp-controller="Enrollments" asp-action="Professor" asp-route-teacher="@ViewBag.teacher">
+    <p>
+        Year: <select asp-for="year" asp-items="Model.yearlist">
+            <option>Select year</option>
+        </select>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].Grade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].SeminalUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].ProjectUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].ExamPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].SeminalPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].ProjectPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].AdditionalPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].FinishDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enrollments[0].Student)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.enrollments) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeminalUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExamPoint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeminalPoints)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectPoints)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalPoints)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinishDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => (item.Student.FirstName))
+            </td>
+            <td>
+                 <a asp-action="ProfessorEdit" asp-route-id="@item.Id" asp-route-teacher="@ViewBag.teacher">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
